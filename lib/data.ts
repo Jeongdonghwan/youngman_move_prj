@@ -1,6 +1,7 @@
 // 데이터 로더 — data/site-pages.json(키워드 페이지), places.json(지역). 빌드 전용.
 import pagesData from '../data/site-pages.json';
 import placesData from '../data/places.json';
+import stockData from '../data/stock.json';
 import { OPEN_WAVE } from './site';
 
 export interface Page {
@@ -56,3 +57,9 @@ export function related(p: Page) {
 
 // 서비스(엑셀 단어)별 대표 페이지 — 메인 레일에서 링크
 export const firstPageOf = (word: string) => OPEN_PAGES.find((p) => p.word === word && !p.mod) || OPEN_PAGES.find((p) => p.word === word);
+
+// 무료 스톡 사진(data/stock.json, Unsplash License) — 슬러그 해시로 고정 선택. 업체 현장 사진 아님 → alt 는 장면만 쓴다.
+export interface Stock { id: string; file: string; w: number; h: number; source: string; author: string; license: string; alt: string }
+export const STOCK = stockData as Stock[];
+export const stock = (id: string) => STOCK.find((s) => s.id === id)!;
+export const stockFor = (seed: string, salt = '') => STOCK[hash(`${seed}::${salt}`) % STOCK.length];

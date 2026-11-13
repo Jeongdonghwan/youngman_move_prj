@@ -107,3 +107,19 @@ export const StickyBar = () => hasPhone ? (
     <a href={smsHref} className="sb-sms"><IconMsg />문자</a>
   </div>
 ) : null;
+
+// 스톡 사진 — 히어로(eager)가 아니면 lazy. 크기는 stock.json 의 실제 픽셀.
+export const StockImg = ({ s, eager, className }: { s: { file: string; w: number; h: number; alt: string }; eager?: boolean; className?: string }) => (
+  <img src={s.file} alt={s.alt} width={s.w} height={s.h} className={className} loading={eager ? 'eager' : 'lazy'} decoding={eager ? undefined : 'async'} {...(eager ? { fetchPriority: 'high' as const } : {})} />
+);
+
+// 사진 히어로 — 화면 너비 사진 + 왼쪽 어두운 덧칠 + 흰 제목. 오른쪽(aside)은 접수표 카드 자리.
+export const PhotoHero = ({ s, children, aside }: { s: { file: string; w: number; h: number; alt: string }; children: React.ReactNode; aside?: React.ReactNode }) => (
+  <section className="hero photo-hero">
+    <div className="ph-bg"><StockImg s={s} eager /></div>
+    <div className="wrap hero-in">
+      <div className="ph-text">{children}</div>
+      {aside}
+    </div>
+  </section>
+);

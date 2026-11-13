@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { OPEN_PAGES, HUBS, openHubs, hubPath, hubEncodedPath, pagePath, pageEncodedPath, firstPageOf, PLACES } from '../lib/data';
+import { OPEN_PAGES, HUBS, openHubs, hubPath, hubEncodedPath, pagePath, pageEncodedPath, firstPageOf, PLACES, stock } from '../lib/data';
 import { getPosts, postPath } from '../lib/blog';
 import { itemListJsonLd, faqJsonLd } from '../lib/jsonld';
 import { BRAND, CONTACT, BUSINESS, SITE_NAME, shareMeta } from '../lib/site';
-import { Actions, Flow, IconArrow, JsonLd, Label, SectionHead } from '../components/Common';
+import { Actions, Flow, IconArrow, JsonLd, Label, PhotoHero, SectionHead, StockImg } from '../components/Common';
 
 const DESC = `광주 북구 장운길에서 출발하는 ${BRAND}. 포장이사·일반이사·원투룸이사·가정이사·보관이사·아파트이사·사무실이사·관공서이사를 견적 상담, 방문 견적, 포장, 운반, 정리 순서로 진행합니다. ${CONTACT.hours}.`;
 export const metadata: Metadata = {
@@ -23,14 +23,14 @@ const STEPS = [
 ];
 
 // 업체가 하는 이사 8가지(플레이스 소개) → 가장 가까운 키워드 페이지로
-const KINDS: { name: string; type: string; d: string; word: string }[] = [
-  { name: '포장이사', type: '짐 싸기부터 수납까지', d: '주방 그릇, 옷장, 가구 분해·조립, 새집 수납까지 이사팀이 맡습니다.', word: '포장이사' },
-  { name: '일반이사', type: '운반 위주', d: '짐은 직접 싸 두고 차량과 운반만 맡깁니다. 가구·가전은 보호재를 감아 옮깁니다.', word: '용달이사' },
-  { name: '원투룸이사', type: '짐이 적은 집', d: '원룸·투룸 짐을 작은 차와 적은 인원으로 옮깁니다. 계단 건물도 인원을 맞춥니다.', word: '원룸이사' },
+const KINDS: { name: string; type: string; d: string; word: string; img?: string }[] = [
+  { name: '포장이사', type: '짐 싸기부터 수납까지', d: '주방 그릇, 옷장, 가구 분해·조립, 새집 수납까지 이사팀이 맡습니다.', word: '포장이사', img: 'packing' },
+  { name: '일반이사', type: '운반 위주', d: '짐은 직접 싸 두고 차량과 운반만 맡깁니다. 가구·가전은 보호재를 감아 옮깁니다.', word: '용달이사', img: 'truck' },
+  { name: '원투룸이사', type: '짐이 적은 집', d: '원룸·투룸 짐을 작은 차와 적은 인원으로 옮깁니다. 계단 건물도 인원을 맞춥니다.', word: '원룸이사', img: 'moveout' },
   { name: '가정이사', type: '집 형태에 맞춰', d: '아파트·주택·빌라마다 다른 동선을 보고 포장 범위를 정합니다.', word: '이사' },
   { name: '보관이사', type: '날짜가 안 맞을 때', d: '나가는 날과 들어가는 날 사이 짐을 맡겨 두었다가 새집으로 옮깁니다.', word: '보관이사' },
   { name: '아파트이사', type: '엘리베이터·사다리차', d: '관리사무소 신고, 엘리베이터 예약, 사다리차 자리를 먼저 맞춥니다.', word: '반포장이사' },
-  { name: '사무실이사', type: '배치도·번호표', d: '책상·PC·서류에 번호를 붙여 새 사무실 배치도대로 놓습니다.', word: '사무실이사' },
+  { name: '사무실이사', type: '배치도·번호표', d: '책상·PC·서류에 번호를 붙여 새 사무실 배치도대로 놓습니다.', word: '사무실이사', img: 'office' },
   { name: '관공서이사', type: '책·문서 순서 유지', d: '도서실·자료실 책을 칸 순서대로 담아 같은 순서로 다시 꽂습니다.', word: '이삿짐센터' },
 ];
 
@@ -52,23 +52,15 @@ export default function Home() {
     <main>
       <JsonLd data={[itemListJsonLd(showcase.map((p) => ({ name: p.kw, path: pageEncodedPath(p) }))), faqJsonLd(FAQ)]} />
 
-      <section className="hero">
-        <div className="wrap hero-in">
-          <div>
-            <p className="hero-meta">광주 북구 장운길 출발 · {CONTACT.hours}</p>
-            <h1><span><i>광주 <em>포장이사</em>,</i></span><span><i>상담부터 정리까지</i></span></h1>
-            <p className="hero-lead">{BRAND}는 광주 북구·광산구·서구와 담양·나주·장성에서 가정·원투룸·사무실·관공서 이사를 합니다. 집을 직접 보고 견적을 내고, 정한 범위대로 싸고 옮기고 풀어 놓습니다.</p>
-            <Actions />
-          </div>
-          <div className="hero-visual">
-            <figure className="hero-photo mask" data-reveal>
-              <img src="/img/shelf.jpg" alt={`${BRAND} 관공서이사 현장 - 도서실 책장을 옮겨 책을 다시 꽂은 모습`} width={1200} height={771} />
-              <figcaption>도서실 책장 이전 현장. 칸 순서대로 담은 책을 새 책장에 같은 순서로 꽂았습니다.</figcaption>
-            </figure>
-            <Label title="이사 접수표" rows={[['출발지', BUSINESS.address], ['접수', CONTACT.intake], ['다니는 곳', '광주 북구·광산구·서구 · 담양 · 나주 · 장성']]} />
-          </div>
-        </div>
-      </section>
+      <PhotoHero
+        s={stock('hero-boxes')}
+        aside={<Label title="이사 접수표" rows={[['출발지', BUSINESS.address], ['접수', CONTACT.intake], ['다니는 곳', '광주 북구·광산구·서구 · 담양 · 나주 · 장성']]} />}
+      >
+        <p className="hero-meta">광주 북구 장운길 출발 · {CONTACT.hours}</p>
+        <h1><span><i>광주 <em>포장이사</em>,</i></span><span><i>상담부터 정리까지</i></span></h1>
+        <p className="hero-lead">{BRAND}는 광주 북구·광산구·서구와 담양·나주·장성에서 가정·원투룸·사무실·관공서 이사를 합니다. 집을 직접 보고 견적을 내고, 정한 범위대로 싸고 옮기고 풀어 놓습니다.</p>
+        <Actions />
+      </PhotoHero>
 
       <section className="sec" id="kinds">
         <div className="wrap">
@@ -77,7 +69,8 @@ export default function Home() {
             {KINDS.map((k) => {
               const to = firstPageOf(k.word);
               return (
-                <article className="kind" key={k.name} data-reveal>
+                <article className={k.img ? 'kind has-img' : 'kind'} key={k.name} data-reveal>
+                  {k.img && <StockImg s={stock(k.img)} className="kind-img" />}
                   <h3>{k.name}</h3>
                   <p className="k-type">{k.type}</p>
                   <p>{k.d}</p>
@@ -101,6 +94,10 @@ export default function Home() {
           <div data-reveal>
             <SectionHead title="책 한 칸, 서류 한 묶음까지 순서대로" />
             <p className="big-lead">관공서·학교·사무실 이사는 짐보다 순서가 중요합니다.</p>
+            <figure className="shelf mask" data-reveal>
+              <img src="/img/shelf.jpg" alt={`${BRAND} 관공서이사 현장 - 도서실 책장을 옮겨 책을 다시 꽂은 모습`} width={1200} height={771} loading="lazy" decoding="async" />
+              <figcaption>도서실 책장 이전 현장. 칸 순서대로 담은 책을 새 책장에 같은 순서로 꽂았습니다.</figcaption>
+            </figure>
           </div>
           <div className="prose" data-reveal>
             <p>책장 칸마다 번호를 붙여 박스에 담고, 새 자리에서 같은 번호 순서로 다시 꽂습니다. 책상과 캐비닛, PC도 자리별 번호표로 묶어 새 사무실 배치도대로 내려놓습니다.</p>
@@ -124,7 +121,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="cta-band" id="visit">
+      <section className="cta-band has-bg" id="visit">
+        <StockImg s={stock('carry')} className="cta-bg" />
         <div className="wrap cta-in">
           <div>
             <h2>방문 견적 때 알려 주시면 좋은 것</h2>
@@ -163,11 +161,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="closing">
-        <div className="wrap" data-reveal>
+      <section className="closing split">
+        <div className="wrap closing-in" data-reveal>
+          <StockImg s={stock('newhome')} className="closing-img" />
+          <div>
           <h2>이삿날과 두 집 주소, 짐 양만 알려 주세요</h2>
           <p>그 세 가지로 방문 견적 날짜를 잡습니다. {HUBS[hubs[0]]?.full ?? '광주 북구'}부터 담양·나주·장성까지, {CONTACT.hours} 상담합니다.</p>
           <Actions />
+          </div>
         </div>
       </section>
     </main>

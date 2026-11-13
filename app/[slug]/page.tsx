@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { OPEN_PAGES, PLACES, getPage, pagePath, pageEncodedPath, hubPath, hubEncodedPath, related } from '../../lib/data';
+import { OPEN_PAGES, PLACES, getPage, pagePath, pageEncodedPath, hubPath, hubEncodedPath, related, rotate, STOCK } from '../../lib/data';
 import { compose } from '../../lib/compose';
 import { breadcrumbJsonLd, faqJsonLd, itemListJsonLd, serviceJsonLd } from '../../lib/jsonld';
 import { BRAND, shareMeta } from '../../lib/site';
 import { j } from '../../lib/ko';
-import { Actions, Flow, IconArrow, JsonLd, Label, SectionHead } from '../../components/Common';
+import { Actions, Flow, IconArrow, JsonLd, Label, PhotoHero, SectionHead, StockImg } from '../../components/Common';
 
 export const dynamicParams = false;
 
@@ -40,6 +40,7 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
   const cut = Math.max(1, words.length - (p.mod ? 2 : 1));
   const h1a = words.slice(0, cut).join(' ');
   const h1b = words.slice(cut).join(' ');
+  const [heroImg, midImg] = rotate(STOCK, p.slug, 'img'); // 슬러그마다 고정, 두 장은 서로 다름
 
   return (
     <main>
@@ -52,19 +53,14 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
         ]}
       />
 
-      <section className="hero">
-        <div className="wrap hero-in">
-          <div>
-            <nav className="crumbs" aria-label="경로">
-              <Link href="/">홈</Link><span>/</span><Link href="/area/">지역</Link><span>/</span><Link href={hubPath(p.hub)}>{p.hub}</Link>
-            </nav>
-            <h1><span><i>{h1a}</i></span>{h1b && <span><i><em>{h1b}</em></i></span>}</h1>
-            <p className="hero-lead">{c.lead}</p>
-            <Actions />
-          </div>
-          <Label title={p.word} rows={c.label} />
-        </div>
-      </section>
+      <PhotoHero s={heroImg} aside={<Label title={p.word} rows={c.label} />}>
+        <nav className="crumbs" aria-label="경로">
+          <Link href="/">홈</Link><span>/</span><Link href="/area/">지역</Link><span>/</span><Link href={hubPath(p.hub)}>{p.hub}</Link>
+        </nav>
+        <h1><span><i>{h1a}</i></span>{h1b && <span><i><em>{h1b}</em></i></span>}</h1>
+        <p className="hero-lead">{c.lead}</p>
+        <Actions />
+      </PhotoHero>
 
       <div className="wrap">
         <section className="answer" aria-label="요약" data-reveal>
@@ -83,6 +79,7 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
             <aside className="aside-box" data-reveal>
               <h3>{j(c.wl, '이')} 맞는 경우</h3>
               <ul className="sq">{c.scope.fit.map((x) => <li key={x}>{x}</li>)}</ul>
+              <StockImg s={midImg} className="aside-img" />
             </aside>
           </div>
         </section>
