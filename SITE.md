@@ -31,7 +31,7 @@ Next.js 14 정적 export. 코드 구조는 woori_prj 재사용, 디자인은 새
 | truck | 이사 종류 일반이사 + 키워드 | unsplash.com/photos/Jv1swO4FghI | Infinity Movers Cape Coral (사진에 상호 안 보임) |
 | moveout | 이사 종류 원투룸이사 + 키워드 | unsplash.com/photos/3BzftacwOzg | Dyana Wing So |
 | office | 이사 종류 사무실이사 + 키워드 | unsplash.com/photos/-_QbEWD1If8 | Brooke Balentine (문서 상자 제품 글자만 작게 보임) |
-| carry | 홈 짙은 상담 구역 배경 + 키워드 | unsplash.com/photos/GgmZ23grWNY | Richard Stachmann |
+| carry | 홈 짙은 상담 구역 배경 + 키워드 | unsplash.com/photos/x8l4lN6-xd0 | Vitaly Gariev |
 | newhome | 홈 주황 마무리 + 키워드 | unsplash.com/photos/HckpKWZTFLw | Alex Tyson |
 | boxes | 키워드 | unsplash.com/photos/gh6uXXV9a5I | Andrew Bright |
 | emptyroom | 키워드 | unsplash.com/photos/4YhNRgL59Fc | Christian Lue |
