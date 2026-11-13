@@ -90,7 +90,7 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
 
       <section className="band">
         <div className="wrap">
-          <SectionHead title={c.flow.heading} sub="견적 상담 → 방문 견적 → 포장 → 운반 → 정리" />
+          <SectionHead center title={c.flow.heading} sub="견적 상담 → 방문 견적 → 포장 → 운반 → 정리" />
           <Flow steps={c.flow.steps} />
         </div>
       </section>

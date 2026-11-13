@@ -60,24 +60,20 @@ export default function Home() {
             <p className="hero-lead">{BRAND}는 광주 북구·광산구·서구와 담양·나주·장성에서 가정·원투룸·사무실·관공서 이사를 합니다. 집을 직접 보고 견적을 내고, 정한 범위대로 싸고 옮기고 풀어 놓습니다.</p>
             <Actions />
           </div>
-          <Label title="이사 접수표" rows={[['출발지', BUSINESS.address], ['운영', CONTACT.hours], ['접수', CONTACT.intake], ['다니는 곳', '광주 북구·광산구·서구 · 담양 · 나주 · 장성']]} />
-        </div>
-      </section>
-
-      <section className="band">
-        <div className="wrap">
-          <SectionHead title="이사는 다섯 단계로 진행합니다" sub="견적 상담 → 방문 견적 → 포장 → 운반 → 정리. 이사 종류가 달라도 순서는 같고, 단계마다 맡는 범위만 달라집니다." />
-          <Flow steps={STEPS} />
+          <div className="hero-visual">
+            <figure className="hero-photo mask" data-reveal>
+              <img src="/img/shelf.jpg" alt={`${BRAND} 관공서이사 현장 - 도서실 책장을 옮겨 책을 다시 꽂은 모습`} width={1200} height={771} />
+              <figcaption>도서실 책장 이전 현장. 칸 순서대로 담은 책을 새 책장에 같은 순서로 꽂았습니다.</figcaption>
+            </figure>
+            <Label title="이사 접수표" rows={[['출발지', BUSINESS.address], ['접수', CONTACT.intake], ['다니는 곳', '광주 북구·광산구·서구 · 담양 · 나주 · 장성']]} />
+          </div>
         </div>
       </section>
 
       <section className="sec" id="kinds">
         <div className="wrap">
-          <div className="rail-head">
-            <SectionHead title="이사 종류" sub="집과 짐에 맞는 방식을 고르세요. 각 항목에서 지역별 안내로 이어집니다." />
-            <div className="rail-nav"><button data-scroll="-1" data-target="kinds-rail" aria-label="이전">←</button><button data-scroll="1" data-target="kinds-rail" aria-label="다음">→</button></div>
-          </div>
-          <div className="rail" id="kinds-rail">
+          <SectionHead center title="이사 종류" sub="집과 짐에 맞는 방식을 고르세요. 각 항목에서 지역별 안내로 이어집니다." />
+          <div className="kinds">
             {KINDS.map((k) => {
               const to = firstPageOf(k.word);
               return (
@@ -93,24 +89,27 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="sec alt">
-        <div className="wrap photo-row">
-          <figure className="mask" data-reveal>
-            <img src="/img/shelf.jpg" alt={`${BRAND} 관공서이사 현장 - 도서실 책장을 옮겨 책을 다시 꽂은 모습`} width={1200} height={771} loading="lazy" />
-            <figcaption>도서실 책장 이전 현장. 칸 순서대로 담은 책을 새 책장에 같은 순서로 꽂았습니다.</figcaption>
-          </figure>
-          <div data-reveal>
-            <SectionHead title="책 한 칸, 서류 한 묶음까지 순서대로" />
-            <div className="prose">
-              <p className="first">관공서·학교·사무실 이사는 짐보다 순서가 중요합니다.</p>
-              <p>책장 칸마다 번호를 붙여 박스에 담고, 새 자리에서 같은 번호 순서로 다시 꽂습니다. 책상과 캐비닛, PC도 자리별 번호표로 묶어 새 사무실 배치도대로 내려놓습니다.</p>
-              <p>업무를 멈추는 날을 줄이려면 건물 반출입 시간과 통신 이전 날짜를 먼저 맞춰 두세요. 연중무휴로 상담을 받으니 주말·업무 시간 밖 일정도 함께 정합니다.</p>
-            </div>
-          </div>
+      <section className="band" id="steps">
+        <div className="wrap">
+          <SectionHead center title="이사는 다섯 단계로 진행합니다" sub="견적 상담 → 방문 견적 → 포장 → 운반 → 정리. 이사 종류가 달라도 순서는 같고, 단계마다 맡는 범위만 달라집니다." />
+          <Flow steps={STEPS} />
         </div>
       </section>
 
       <section className="sec">
+        <div className="wrap cols">
+          <div data-reveal>
+            <SectionHead title="책 한 칸, 서류 한 묶음까지 순서대로" />
+            <p className="big-lead">관공서·학교·사무실 이사는 짐보다 순서가 중요합니다.</p>
+          </div>
+          <div className="prose" data-reveal>
+            <p>책장 칸마다 번호를 붙여 박스에 담고, 새 자리에서 같은 번호 순서로 다시 꽂습니다. 책상과 캐비닛, PC도 자리별 번호표로 묶어 새 사무실 배치도대로 내려놓습니다.</p>
+            <p>업무를 멈추는 날을 줄이려면 건물 반출입 시간과 통신 이전 날짜를 먼저 맞춰 두세요. 연중무휴로 상담을 받으니 주말·업무 시간 밖 일정도 함께 정합니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="sec alt">
         <div className="wrap">
           <SectionHead title="다니는 지역" sub="출발지는 광주 북구 장운길입니다. 담양 고서·가사문학면은 바로 넘어가고, 나주·장성은 날짜와 시작 시간을 먼저 맞춥니다." />
           <ul className="areas">
@@ -141,7 +140,7 @@ export default function Home() {
 
       <section className="sec">
         <div className="wrap">
-          <SectionHead title="자주 묻는 질문" />
+          <SectionHead center title="자주 묻는 질문" />
           <div className="faq">
             {FAQ.map((f) => <details key={f.q} data-reveal><summary>{f.q}<i /></summary><p>{f.a}</p></details>)}
           </div>

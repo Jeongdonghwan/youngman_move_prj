@@ -1,4 +1,4 @@
-// 공통 UI — 이모지 없이 선 아이콘, 각진 슬랩 버튼(오프셋 그림자), 송장(라벨) 카드.
+// 공통 UI — 이모지 없이 선 아이콘, 각진 주황 버튼(반경 4px), 그림자 진 접수표 카드, 원형 아이콘 진행 단계.
 // 전화번호가 비어 있으면(lib/site.ts CONTACT.phone = '') 전화 버튼·하단 바가 빠지고 방문 견적 안내만 남는다.
 import Link from 'next/link';
 import { BRAND, CONTACT, BUSINESS, tel, smsHref, hasPhone } from '../lib/site';
@@ -35,17 +35,24 @@ export const Label = ({ rows, title = '이사 접수표' }: { rows: [string, str
   </aside>
 );
 
-export const SectionHead = ({ title, sub }: { title: string; sub?: string }) => (
-  <header className="sh" data-reveal>
+export const SectionHead = ({ title, sub, center }: { title: string; sub?: string; center?: boolean }) => (
+  <header className={center ? 'sh c' : 'sh'} data-reveal>
     <h2>{title}</h2>
     {sub && <p>{sub}</p>}
   </header>
 );
 
-// 5단계 타임라인 — 견적 상담 → 방문 견적 → 포장 → 운반 → 정리
+// 5단계 진행 — 견적 상담 → 방문 견적 → 포장 → 운반 → 정리 (단계마다 선 아이콘, 번호 없음)
+const STEP_ICONS = [
+  'M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z',
+  'M3 11l9-7 9 7M5 10v10h14V10M10 20v-6h4v6',
+  'M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8',
+  'M1 6h13v10H1zM14 10h4l3 3v3h-7M5.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM17.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z',
+  'M20 6L9 17l-5-5',
+];
 export const Flow = ({ steps }: { steps: { t: string; d: string }[] }) => (
   <ol className="flow reveal-group">
-    {steps.map((x) => <li key={x.t}><strong>{x.t}</strong><p>{x.d}</p></li>)}
+    {steps.map((x, i) => <li key={x.t}><span className="flow-ico"><Svg d={STEP_ICONS[i % STEP_ICONS.length]} size={26} /></span><strong>{x.t}</strong><p>{x.d}</p></li>)}
   </ol>
 );
 
@@ -58,6 +65,7 @@ export const Header = () => (
       </Link>
       <nav className="nav" aria-label="주 메뉴">
         <Link href="/#kinds" className="hide-m">이사 종류</Link>
+        <Link href="/#steps" className="hide-m">진행 순서</Link>
         <Link href="/area/" className="hide-m">지역</Link>
         <Link href="/blog/" className="hide-m">블로그</Link>
         {hasPhone
@@ -72,10 +80,15 @@ export const Footer = () => (
   <footer className="site-footer">
     <div className="wrap foot-grid">
       <div>
-        <strong className="foot-brand">{BRAND}</strong>
+        <strong className="foot-brand"><span className="logo-mark" aria-hidden="true"><i /></span>{BRAND}</strong>
         <p>포장이사 · 일반이사 · 원투룸이사 · 가정이사 · 보관이사 · 아파트이사 · 사무실이사 · 관공서이사<br />광주 북구 · 광산구 · 서구 · 담양 · 나주 · 장성 · {CONTACT.hours}</p>
-        <p><Link href="/area/">지역 안내</Link> · <Link href="/blog/">블로그</Link> · <a href="/rss.xml">RSS</a></p>
       </div>
+      <ul className="foot-links">
+        <li><Link href="/#kinds">이사 종류</Link></li>
+        <li><Link href="/area/">지역 안내</Link></li>
+        <li><Link href="/blog/">블로그</Link></li>
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
       <ul className="foot-info">
         <li><span>상호</span>{BRAND}</li>
         <li><span>주소</span>{BUSINESS.address}</li>
