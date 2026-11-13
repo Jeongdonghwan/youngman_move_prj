@@ -456,7 +456,7 @@ export function compose(p: Page): Composed {
     `${p.kw} — 방문 견적부터 정리까지 | ${BRAND}`,
     `${p.kw}, ${C.noun} 이사 순서 | ${BRAND}`,
   ], s, 'title').slice(0, 60);
-  const description = `${where} ${wl}${m ? ' ' + m : ''} 안내. ${svc.what.split(' — ')[0]}. ${j(BRAND, '는')} 광주 북구 장운길에서 출발하며 ${CONTACT.hours}, ${j(CONTACT.intake, '으로')} 진행합니다.`.slice(0, 158);
+  const description = `${where} ${wl}${m ? ' ' + m : ''} 안내. ${svc.what.split(' — ')[0]}. ${j(BRAND, '는')} ${CONTACT.hours}, ${j(CONTACT.intake, '으로')} 진행합니다.`.slice(0, 158);
 
   const lead = pick([
     `${nm} ${wl}, ${svc.what}입니다. ${j(BRAND, '는')} 견적 상담 → 방문 견적 → 포장 → 운반 → 정리 순서로 진행합니다.`,
@@ -473,7 +473,6 @@ export function compose(p: Page): Composed {
   const label: [string, string][] = [
     ['도착지', where],
     ['이사 종류', `${wl} (${svc.type})`],
-    ['출발 기준', BUSINESS.address],
     ['접수', `${CONTACT.intake}`],
   ];
 
