@@ -40,7 +40,7 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
   const cut = Math.max(1, words.length - (p.mod ? 2 : 1));
   const h1a = words.slice(0, cut).join(' ');
   const h1b = words.slice(cut).join(' ');
-  const [heroImg, midImg] = rotate(STOCK, p.slug, 'img'); // 슬러그마다 고정, 두 장은 서로 다름
+  const [heroImg, midImg, ...restImg] = rotate(STOCK, p.slug, 'img'); // 슬러그마다 고정, 서로 다른 사진
 
   return (
     <main>
@@ -67,6 +67,9 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
           <p>{c.answer}</p>
           <ul className="sq">{c.region.aside.map((x) => <li key={x}>{x}</li>)}</ul>
         </section>
+        <div className="strip strip-3">
+          {restImg.slice(0, 3).map((s) => <figure key={s.id}><StockImg s={s} /></figure>)}
+        </div>
       </div>
 
       <div className="wrap">

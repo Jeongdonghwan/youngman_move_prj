@@ -3,7 +3,7 @@
 //   포장이사·일반이사·원투룸이사·가정이사·보관이사·아파트이사·사무실이사·관공서이사.
 // 쓰지 않는 것: 가격·견적 금액, 경력 연수, 리뷰 수, 만족도, 지어낸 숫자. 손해 보상·허가는 일반 설명만.
 import { Page, Place, Hub, PLACES, HUBS, seedOf, rotate } from './data';
-import { BRAND, CONTACT, BUSINESS, hasPhone } from './site';
+import { BRAND, CONTACT, hasPhone } from './site';
 import { j } from './ko';
 
 const pick = <T,>(arr: T[], seed: string, salt: string): T => arr[seedOf(`${seed}::${salt}`) % arr.length];
@@ -59,7 +59,7 @@ const CTX: Record<Ctx, { noun: string; consult: string; pack: string; access: ((
     access: [
       (nm) => `${j(nm, '은')} 마당이 있는 집과 마을 안길이 많아 차가 어디까지 들어갈 수 있는지부터 확인합니다. 비포장 길이나 좁은 다리가 있으면 미리 말씀해 주세요.`,
       (nm) => `${nm} 전원주택·농가 이사는 집 안 짐보다 창고·마당 짐이 더 많은 경우가 있습니다. 농기구와 장독, 화분을 가져갈지 먼저 정합니다.`,
-      (nm) => `${nm}처럼 읍면 지역은 출발지와 거리가 있어 이삿날 시작 시간을 먼저 정하고 그에 맞춰 짐을 꾸립니다.`,
+      (nm) => `${nm}처럼 읍면 마을 이사는 이삿날 시작 시간을 먼저 정하고, 그 시간에 맞춰 짐 싸는 순서를 꾸립니다.`,
     ],
     check: ['차가 들어갈 수 있는 길과 마당 폭', '창고·비닐하우스·마당 짐을 가져갈지', '장독·화분·농기구처럼 따로 싸야 하는 짐'],
     move: (nm) => `${nm} 마을 길에 맞는 차량을 보내고, 마당 짐과 집 안 짐을 나눠 싣습니다.`,
@@ -173,7 +173,7 @@ const SVC: Record<string, Svc> = {
       { t: '배치', d: '새집에서 가구 자리를 잡고 박스를 방 안에 내려놓습니다' },
     ],
     steps: (nm) => [
-      `${nm} 출발지와 도착지, 큰 짐 개수를 통화로 듣습니다.`,
+      `${nm} 지금 집과 새집 주소, 큰 짐 개수를 통화로 듣습니다.`,
       `짐 사진을 보고 차 크기와 인원을 정하고, 애매하면 방문해서 봅니다.`,
       `직접 싼 박스는 확인만 하고, 남은 잔짐과 가전을 포장합니다.`,
       `작은 차로 골목 안까지 들어가 짐을 싣고 옮깁니다.`,
@@ -197,7 +197,7 @@ const SVC: Record<string, Svc> = {
       { t: '배치', d: '새집에서 가구를 원하는 방에 내려놓습니다' },
     ],
     steps: (nm) => [
-      `${nm} 출발지·도착지와 옮길 짐 목록을 듣습니다.`,
+      `${nm} 지금 집·새집 주소와 옮길 짐 목록을 듣습니다.`,
       `박스 수와 큰 짐을 보고 차 크기와 인원을 정합니다.`,
       `포장은 직접 해 두시고, 이사팀은 가구·가전에 보호재만 감습니다.`,
       `차에 실어 새집으로 옮기고 계단·엘리베이터로 올립니다.`,
@@ -345,7 +345,7 @@ const PRICE_ROWS: [string, string][] = [
   ['짐 양', '방 수보다 실제 짐 부피 — 베란다·창고 짐까지'],
   ['포장 범위', '포장이사·반포장·운반만 중 무엇인지'],
   ['층수·동선', '엘리베이터, 사다리차, 계단 운반 여부'],
-  ['거리', '출발지와 도착지 사이 거리'],
+  ['이동 구간', '지금 집과 새집 위치'],
   ['날짜', '주말·월말처럼 이사가 몰리는 날인지'],
   ['추가 작업', '에어컨 이전, 버릴 짐 처리, 보관'],
 ];
@@ -387,7 +387,7 @@ function modSection(g: ModG, m: string, lb: string, nm: string, wl: string, P: P
           V([`${nm} ${wl} ${j(m, '을')} 찾을 때는 세 가지를 물어보세요. 방문 견적을 하는지, 견적서에 포장 범위와 인원이 적혀 있는지, 파손이 생기면 어떻게 처리하는지입니다.`,
              `${j(m, '을')} 고르는 기준은 이삿날 진행을 미리 설명해 주는지입니다. 몇 시에 시작해서 어느 짐부터 싸고, 새집에서는 어떤 순서로 내리는지 묻고 답을 들어 보세요.`,
              `${nm}처럼 ${j(P.homes.split(',')[0], '이')} 많은 곳은 동선을 아는 것이 중요합니다. 업체가 견적 때 엘리베이터·사다리차·주차를 먼저 묻는지 보세요.`]),
-          V([`${j(BRAND, '는')} 광주 북구 장운길에서 출발해 ${nm}까지 방문 견적을 갑니다. ${j(CONTACT.hours, '으로')} 상담을 받습니다.`,
+          V([`${j(BRAND, '는')} ${nm} 집까지 직접 와서 짐을 보고 견적을 냅니다. ${j(CONTACT.hours, '으로')} 상담을 받습니다.`,
              `${j(BRAND, '는')} ${j(CONTACT.intake, '으로')} 일정을 잡고, 집을 보고 난 뒤 견적서를 드립니다.`]),
         ],
         table: [['방문 견적', '하는지'], ['견적서', '포장 범위·인원·차량이 적혀 있는지'], ['이삿날', '시작 시간과 순서를 설명하는지'], ['마무리', '파손·빠진 짐을 함께 확인하는지']] as [string, string][],
@@ -484,7 +484,7 @@ export function compose(p: Page): Composed {
     paras: [
       `${P.note}. ${hubLine}${nm}에는 ${j(P.homes, '이')} 있습니다.`,
       pick(C.access, s, 'acc')(nm),
-      `${pick([`${H.route}.`, `${BRAND}의 출발지는 ${BUSINESS.address}입니다. ${H.route}.`], s, 'route')} ${near.length ? `${j(H.full, '에서는')} ${near.join('·')}도 같은 방식으로 방문 견적을 갑니다. ` : ''}${pick([`${nm} 주소를 알려 주시면 방문 견적 날짜부터 잡습니다.`, `이삿날 시작 시간은 ${nm} 도착지 사정에 맞춰 정합니다.`, `${H.spots.join('·')} 주변도 같은 방식으로 다닙니다.`], s, 'rt')}`,
+      `${pick([`${H.route}.`, `${H.full} 안이라면 ${j(BRAND, '가')} 동네를 가리지 않고 갑니다. ${H.route}.`], s, 'route')} ${near.length ? `${j(H.full, '에서는')} ${near.join('·')}도 같은 방식으로 방문 견적을 갑니다. ` : ''}${pick([`${nm} 주소를 알려 주시면 방문 견적 날짜부터 잡습니다.`, `이삿날 시작 시간은 ${nm} 도착지 사정에 맞춰 정합니다.`, `${H.spots.join('·')} 주변도 같은 방식으로 다닙니다.`], s, 'rt')}`,
     ],
     aside: C.check,
   };
@@ -536,7 +536,7 @@ export function compose(p: Page): Composed {
 
   // ---- FAQ ----
   const pool: { q: string; a: string }[] = [
-    { q: `${nm}까지 방문 견적을 오나요?`, a: `네. ${j(BRAND, '는')} ${BUSINESS.address}에서 출발해 ${H.full} 안 ${nm}까지 방문 견적을 갑니다. ${H.route}.` },
+    { q: `${nm}까지 방문 견적을 오나요?`, a: `네. ${j(BRAND, '는')} ${H.full} 안 ${nm}까지 방문 견적을 갑니다. ${H.route}.` },
     { q: '밤이나 휴일에도 상담하나요?', a: `${j(CONTACT.hours, '으로')} 상담을 받습니다. 방문 견적과 이삿날은 예약으로 잡습니다.` },
     { q: '견적 금액은 언제 알 수 있나요?', a: `${nm} 집을 보고 짐 양·층수·포장 범위를 확인한 뒤 견적서로 드립니다. 통화만으로는 범위만 말씀드립니다.` },
     { q: `${C.noun} 이사에서 미리 확인할 것은요?`, a: `${C.check.join(', ')}입니다. ${nm} 방문 견적 전에 알아 두시면 이삿날이 짧아집니다.` },
@@ -550,7 +550,7 @@ export function compose(p: Page): Composed {
   const closing = pick([
     { heading: `${nm} 이삿날, 새집 위치, 짐 양`, text: `이 세 가지를 들으면 ${wl} 방문 견적 날짜를 잡을 수 있습니다. ${CONTACT.hours} 상담합니다.` },
     { heading: `${nm} ${wl}, 방문 견적부터`, text: `짐을 직접 보고 포장 범위와 이삿날 순서를 정합니다. ${j(CONTACT.intake, '으로')} 진행합니다.` },
-    { heading: `견적 상담에서 정리까지, ${nm}`, text: `${j(BRAND, '는')} 광주 북구 장운길에서 출발합니다. ${hasPhone ? `${CONTACT.phone} 전화로 상담을 받습니다.` : '방문 견적 예약으로 상담을 받습니다.'}` },
+    { heading: `견적 상담에서 정리까지, ${nm}`, text: `${nm} 집을 보고 포장부터 새집 정리까지 한 번에 맡습니다. ${hasPhone ? `${CONTACT.phone} 전화로 상담을 받습니다.` : '방문 견적 예약으로 상담을 받습니다.'}` },
   ], s, 'close');
 
   return { title, description, lead, answer, wl, type: svc.type, label, region, flow, scope, mod, ready, cta, info, faq, closing };

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getPosts, postPath, postEncodedPath } from '../../lib/blog';
-import { OPEN_PAGES, pagePath, pageEncodedPath } from '../../lib/data';
+import { OPEN_PAGES, pagePath, pageEncodedPath, stock } from '../../lib/data';
 import { breadcrumbJsonLd, itemListJsonLd } from '../../lib/jsonld';
-import { Actions, IconArrow, JsonLd, SectionHead } from '../../components/Common';
+import { Actions, IconArrow, JsonLd, SectionHead, StockImg } from '../../components/Common';
 import { BRAND, shareMeta } from '../../lib/site';
 
 const TITLE = `이사 준비 블로그 | ${BRAND}`;
@@ -28,10 +28,13 @@ export default function BlogIndex() {
         itemListJsonLd(posts.length ? posts.map((p) => ({ name: p.title, path: postEncodedPath(p) })) : hubs.map((p) => ({ name: p.kw, path: pageEncodedPath(p) }))),
       ]} />
       <section className="page-hero">
-        <div className="wrap">
+        <div className="wrap ph2">
+          <div>
           <nav className="crumbs" aria-label="경로"><Link href="/">홈</Link><span>/</span><span>블로그</span></nav>
           <h1>이사 준비 블로그</h1>
           <p>상담 때 자주 듣는 질문을 한 편에 하나씩 답합니다. 집집마다 다른 견적 금액은 적지 않고, 이사 방식을 고르고 준비하는 데 필요한 내용만 씁니다.</p>
+          </div>
+          <StockImg s={stock('packing')} eager className="ph2-img" />
         </div>
       </section>
       <div className="wrap">

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { HUBS, PLACES, openHubs, hubPages, hubPath, hubEncodedPath } from '../../lib/data';
+import { HUBS, PLACES, openHubs, hubPages, hubPath, hubEncodedPath, stock } from '../../lib/data';
 import { breadcrumbJsonLd, itemListJsonLd } from '../../lib/jsonld';
-import { Actions, IconArrow, JsonLd, SectionHead } from '../../components/Common';
+import { Actions, IconArrow, JsonLd, SectionHead, StockImg } from '../../components/Common';
 import { BRAND, shareMeta } from '../../lib/site';
 
 const TITLE = `광주·담양·나주·장성 이사 지역 안내 | ${BRAND}`;
@@ -21,10 +21,13 @@ export default function AreaIndex() {
         itemListJsonLd(hubs.map((h) => ({ name: `${h} 이사`, path: hubEncodedPath(h) }))),
       ]} />
       <section className="page-hero">
-        <div className="wrap">
+        <div className="wrap ph2">
+          <div>
           <nav className="crumbs" aria-label="경로"><Link href="/">홈</Link><span>/</span><span>지역</span></nav>
           <h1>이사 지역 안내</h1>
-          <p>출발지는 광주 북구 장운길 49-4입니다. 광주 북구·광산구·서구는 시내 동선으로, 담양·나주·장성은 날짜와 시작 시간을 먼저 맞춰 다닙니다.</p>
+          <p>광주 북구·광산구·서구와 담양·나주·장성, 아파트 단지부터 읍면 마을까지 방문 견적을 갑니다. 구·시·군을 고르면 동네별 이사 안내로 이어집니다.</p>
+          </div>
+          <StockImg s={stock('truck')} eager className="ph2-img" />
         </div>
       </section>
       <div className="wrap">

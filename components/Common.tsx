@@ -114,8 +114,8 @@ export const StockImg = ({ s, eager, className }: { s: { file: string; w: number
 );
 
 // 사진 히어로 — 화면 너비 사진 + 왼쪽 어두운 덧칠 + 흰 제목. 오른쪽(aside)은 접수표 카드 자리.
-export const PhotoHero = ({ s, children, aside }: { s: { file: string; w: number; h: number; alt: string }; children: React.ReactNode; aside?: React.ReactNode }) => (
-  <section className="hero photo-hero">
+export const PhotoHero = ({ s, children, aside, className = '' }: { s: { file: string; w: number; h: number; alt: string }; children: React.ReactNode; aside?: React.ReactNode; className?: string }) => (
+  <section className={`hero photo-hero ${className}`}>
     <div className="ph-bg"><StockImg s={s} eager /></div>
     <div className="wrap hero-in">
       <div className="ph-text">{children}</div>

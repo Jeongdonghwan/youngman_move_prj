@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HUBS, PLACES, openHubs, hubPages, hubSlug, hubEncodedPath, pagePath, pageEncodedPath } from '../../../lib/data';
+import { HUBS, PLACES, openHubs, hubPages, hubSlug, hubEncodedPath, pagePath, pageEncodedPath, rotate, STOCK } from '../../../lib/data';
 import { breadcrumbJsonLd, itemListJsonLd } from '../../../lib/jsonld';
-import { Actions, IconArrow, JsonLd, SectionHead } from '../../../components/Common';
+import { Actions, IconArrow, JsonLd, SectionHead, StockImg } from '../../../components/Common';
 import { BRAND, shareMeta } from '../../../lib/site';
 
 export const dynamicParams = false;
@@ -35,11 +35,14 @@ export default function Hub({ params }: { params: { hub: string } }) {
         itemListJsonLd(pages.map((p) => ({ name: p.kw, path: pageEncodedPath(p) }))),
       ]} />
       <section className="page-hero">
-        <div className="wrap">
+        <div className="wrap ph2">
+          <div>
           <nav className="crumbs" aria-label="경로"><Link href="/">홈</Link><span>/</span><Link href="/area/">지역</Link><span>/</span><span>{h}</span></nav>
           <h1>{h} 포장이사·원룸이사 지역 안내</h1>
           <p>{PLACES[h].note}. 주거 형태는 {PLACES[h].homes}입니다. {H.route}.</p>
           <Actions />
+          </div>
+          <StockImg s={rotate(STOCK, h, 'hub')[0]} eager className="ph2-img" />
         </div>
       </section>
       <div className="wrap">
