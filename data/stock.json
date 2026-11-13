@@ -34,10 +34,11 @@
   "file": "/img/carry.webp",
   "w": 1200,
   "h": 800,
-  "source": "https://unsplash.com/photos/man-carrying-a-mattress-down-a-sidewalk-8QttzdTGGV4",
-  "author": "Rosa Jakobi",
+  "source": "https://unsplash.com/photos/GgmZ23grWNY",
+  "author": "Richard Stachmann",
   "license": "Unsplash License",
-  "alt": "매트리스를 머리 위로 들고 골목길을 옮기는 모습"
+  "alt": "흰 밴 옆에서 수레에 박스를 높이 싣고 옮기는 모습",
+  "note": "번호판 흐림 처리"
  },
  {
   "id": "truck",
