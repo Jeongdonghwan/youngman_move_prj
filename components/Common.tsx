@@ -1,7 +1,7 @@
 // 공통 UI — 이모지 없이 선 아이콘, 각진 주황 버튼(반경 4px), 그림자 진 접수표 카드, 원형 아이콘 진행 단계.
 // 전화번호가 비어 있으면(lib/site.ts CONTACT.phone = '') 전화 버튼·하단 바가 빠지고 방문 견적 안내만 남는다.
 import Link from 'next/link';
-import { BRAND, CONTACT, BUSINESS, tel, smsHref, hasPhone } from '../lib/site';
+import { BRAND, CONTACT, BUSINESS, UPDATED, tel, smsHref, hasPhone } from '../lib/site';
 
 export const JsonLd = ({ data }: { data: object | object[] }) => (
   <>{(Array.isArray(data) ? data : [data]).map((d, i) => <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(d).replace(/</g, '\\u003c') }} />)}</>
@@ -85,6 +85,7 @@ export const Footer = () => (
       </div>
       <ul className="foot-links">
         <li><Link href="/#kinds">이사 종류</Link></li>
+        <li><Link href="/about/">소개</Link></li>
         <li><Link href="/area/">지역 안내</Link></li>
         <li><Link href="/blog/">블로그</Link></li>
         <li><a href="/rss.xml">RSS</a></li>
@@ -97,7 +98,7 @@ export const Footer = () => (
         <li><span>접수</span>{CONTACT.intake}</li>
       </ul>
     </div>
-    <div className="wrap foot-bottom">© {new Date().getFullYear()} {BRAND} · 상담 때 받은 주소·연락처는 견적과 이사 안내에만 씁니다.</div>
+    <div className="wrap foot-bottom">© {new Date().getFullYear()} {BRAND} · 최종 수정 <time dateTime={UPDATED}>{UPDATED}</time> · 상담 때 받은 주소·연락처는 견적과 이사 안내에만 씁니다.</div>
   </footer>
 );
 
