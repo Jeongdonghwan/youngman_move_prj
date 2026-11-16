@@ -7,8 +7,8 @@ pattern: diy
 industry: 이사
 channel: blog
 region: null
-date:
-publishedAt:
+date: 2026-11-24
+publishedAt: 2026-11-24
 ---
 
 ## 선부터 정리하고, 벽을 확인한 뒤 거세요

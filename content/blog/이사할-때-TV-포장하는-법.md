@@ -7,8 +7,8 @@ pattern: diy
 industry: 이사
 channel: blog
 region: null
-date:
-publishedAt:
+date: 2026-12-07
+publishedAt: 2026-12-07
 ---
 
 ## 화면을 덮고, 세워서, 눌리지 않게
