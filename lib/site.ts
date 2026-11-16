@@ -2,7 +2,7 @@
 // 근거: source/facts.md (네이버 플레이스 2074721611 수집 2026-11-12). 상호는 사용자 지정 — 플레이스 표기 상호는 쓰지 않는다.
 
 // 미리보기 주소(임시). 도메인이 정해지면 SITE_URL 과 data/drip.json siteUrl 을 같이 바꾼다.
-export const SITE_URL = process.env.SITE_URL || 'http://127.0.0.1:18995';
+export const SITE_URL = process.env.SITE_URL || 'https://xn--4i2b6iw2uw4bba981exkas3bn03e.kr';
 export const BRAND = '젊은사람익스프레스'; // 상호 — 여기 한 곳만 바꾸면 된다 (og 이미지는 scripts/make_og.py 가 이 줄을 읽음)
 export const SITE_NAME = `${BRAND} | 광주 포장이사·원룸이사·사무실이사`;
 

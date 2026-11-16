@@ -6,7 +6,7 @@ Next.js 14 정적 export. 코드 구조는 woori_prj 재사용, 디자인은 새
 ## 확인 필요 (위에서부터)
 - [x] **전화번호** — 010-3692-0024 (사용자 제공 2026-11-12, `lib/site.ts` CONTACT.phone). 비우면 전화 버튼·하단 바·JSON-LD telephone 이 자동으로 빠지고 '방문 견적 안내'만 남는다.
 - [ ] 오픈일 — 정해지면 `python -I scripts/drip/schedule_posts.py <YYYY-MM-DD>` (블로그 45편 date 채움 + data/drip.json launch)
-- [ ] 도메인 → `lib/site.ts` SITE_URL, `data/drip.json` siteUrl (지금 미리보기 `http://127.0.0.1:18995`)
+- [ ] 도메인 → `lib/site.ts` SITE_URL, `data/drip.json` siteUrl (지금 미리보기 `https://xn--4i2b6iw2uw4bba981exkas3bn03e.kr`)
 - [ ] 서치어드바이저·서치콘솔 소유확인 코드 (`lib/site.ts` NAVER_VERIFY·GOOGLE_VERIFY, 지금 빈 값)
 - [ ] 사업자등록번호 (`BUSINESS.bizNumber`, 넣으면 푸터에 나옴)
 - [ ] 업체 사진 추가 — 업체 실제 사진은 shelf.jpg 1장뿐. 차량·작업 사진을 받으면 스톡 대신 히어로·OG에 넣기 (지금은 아래 스톡 사진)
@@ -62,7 +62,7 @@ python -I scripts/drip/drip_status.py data/drip.json      # launch null → WAVE
 python -I scripts/drip/schedule_posts.py 2026-12-01       # 오픈일 정해지면 (블로그 예약 공개)
 bash scripts/deploy.sh <묶음> <https://도메인>            # remote 필요
 ```
-미리보기: `cd out && python -m http.server 18995 --bind 127.0.0.1` → http://127.0.0.1:18995/
+미리보기: `cd out && python -m http.server 18995 --bind 127.0.0.1` → https://xn--4i2b6iw2uw4bba981exkas3bn03e.kr/
 
 ## 점검 결과 (2026-11-13 리디자인 후 재점검, OPEN_WAVE=4 — 수치 동일)
 check_all 4항목 통과(SEO 구조·중복 문서·AI 티·화면 버그) · 본문 평균 약 1,590자(최소 1,337) · 같은 문장 평균 15% · pseo_lint 바이그램 유사도 평균 0.48 · 조사 오류 0 · design_lint 경고 0 · 390/1366px 가로 넘침 없음.
