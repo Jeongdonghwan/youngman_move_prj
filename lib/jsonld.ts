@@ -1,4 +1,4 @@
-import { SITE_URL, SITE_NAME, BRAND, CONTACT, BUSINESS, SERVICES, hasPhone } from './site';
+import { SITE_URL, SITE_NAME, BRAND, CONTACT, BUSINESS, SERVICES, hasPhone, UPDATED } from './site';
 
 // 업체 — 주소는 플레이스 표기(광주 북구 장운길 49-4), 행정구역은 2026 통합 표기. 전화는 lib/site.ts 에 있을 때만.
 export const businessJsonLd = () => ({
@@ -47,6 +47,7 @@ export const serviceJsonLd = (o: { name: string; type: string; description: stri
   description: o.description,
   url: `${SITE_URL}${o.path}`,
   areaServed: { '@type': 'Place', name: o.area },
+  dateModified: UPDATED,
   provider: { '@id': `${SITE_URL}/#business` },
 });
 
