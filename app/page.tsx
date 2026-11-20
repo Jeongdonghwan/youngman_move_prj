@@ -6,7 +6,7 @@ import { itemListJsonLd, faqJsonLd } from '../lib/jsonld';
 import { BRAND, CONTACT, SITE_NAME, shareMeta } from '../lib/site';
 import { Actions, Flow, IconArrow, JsonLd, Label, PhotoHero, SectionHead, StockImg } from '../components/Common';
 
-const DESC = `광주 이사업체 ${BRAND}. 포장이사·일반이사·원투룸이사·가정이사·보관이사·아파트이사·사무실이사·관공서이사를 견적 상담, 방문 견적, 포장, 운반, 정리 순서로 진행합니다. ${CONTACT.hours}.`;
+const DESC = `광주 이사업체 ${BRAND}. 포장이사·원투룸·아파트·사무실이사를 방문 견적부터 포장·운반·정리까지 진행합니다. ${CONTACT.hours}.`;
 export const metadata: Metadata = {
   title: SITE_NAME,
   description: DESC,
