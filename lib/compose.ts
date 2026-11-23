@@ -557,3 +557,6 @@ export function compose(p: Page): Composed {
 }
 
 export const SVC_SUMMARY = Object.fromEntries(Object.entries(SVC).map(([k, v]) => [k, v.what]));
+
+// lib/ray.ts(레이 구조 본문)에서 재료로 쓴다
+export { SVC as SVC_DATA, CTX as CTX_DATA, modGroup };

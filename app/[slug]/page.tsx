@@ -2,11 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { OPEN_PAGES, PLACES, getPage, pagePath, pageEncodedPath, hubPath, hubEncodedPath, related, rotate, STOCK } from '../../lib/data';
-import { compose } from '../../lib/compose';
+import { composeRay } from '../../lib/ray';
 import { breadcrumbJsonLd, faqJsonLd, itemListJsonLd, serviceJsonLd } from '../../lib/jsonld';
 import { BRAND, shareMeta } from '../../lib/site';
-import { j } from '../../lib/ko';
-import { Actions, Flow, IconArrow, JsonLd, Label, PhotoHero, SectionHead, StockImg } from '../../components/Common';
+import { Actions, IconArrow, JsonLd, Label, PhotoHero, StockImg } from '../../components/Common';
 
 export const dynamicParams = false;
 
@@ -18,7 +17,7 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const p = getPage(params.slug);
   if (!p) return {};
-  const c = compose(p);
+  const c = composeRay(p);
   const url = pageEncodedPath(p);
   return {
     title: c.title,
@@ -31,15 +30,11 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default function KeywordPage({ params }: { params: { slug: string } }) {
   const p = getPage(params.slug);
   if (!p) notFound();
-  const c = compose(p);
+  const c = composeRay(p);
   const P = PLACES[p.place];
-  const rel = related(p);
+  const rel = related(p, 5);
   const path = pageEncodedPath(p);
   const relList = [...rel.samePlace, ...rel.sameHub, ...rel.otherHubs].map((x) => ({ name: x.kw, path: pageEncodedPath(x) }));
-  const words = p.kw.split(' ');
-  const cut = Math.max(1, words.length - (p.mod ? 2 : 1));
-  const h1a = words.slice(0, cut).join(' ');
-  const h1b = words.slice(cut).join(' ');
   const [heroImg, midImg, ...restImg] = rotate(STOCK, p.slug, 'img'); // 슬러그마다 고정, 서로 다른 사진
 
   return (
@@ -57,59 +52,32 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
         <nav className="crumbs" aria-label="경로">
           <Link href="/">홈</Link><span>/</span><Link href="/area/">지역</Link><span>/</span><Link href={hubPath(p.hub)}>{p.hub}</Link>
         </nav>
-        <h1><span><i>{h1a}</i></span>{h1b && <span><i><em>{h1b}</em></i></span>}</h1>
+        <p className="hero-meta">{c.cat}</p>
+        <h1><span>{p.kw}</span>{' '}<span className="hero-sub">{c.h1sub}</span></h1>
         <p className="hero-lead">{c.lead}</p>
         <Actions />
       </PhotoHero>
 
       <div className="wrap">
-        <section className="answer" aria-label="요약" data-reveal>
-          <p>{c.answer}</p>
-          <ul className="sq">{c.region.aside.map((x) => <li key={x}>{x}</li>)}</ul>
-        </section>
-        <div className="strip strip-3">
-          {restImg.slice(0, 3).map((s) => <figure key={s.id}><StockImg s={s} /></figure>)}
-        </div>
-      </div>
-
-      <div className="wrap">
-        <section className="sec">
-          <SectionHead title={c.region.heading} />
-          <div className="cols">
-            <div className="prose" data-reveal>
-              {c.region.paras.map((t, i) => <p key={i} className={i === 0 ? 'first' : ''}>{t}</p>)}
-            </div>
-            <aside className="aside-box" data-reveal>
-              <h3>{j(c.wl, '이')} 맞는 경우</h3>
-              <ul className="sq">{c.scope.fit.map((x) => <li key={x}>{x}</li>)}</ul>
-              <StockImg s={midImg} className="aside-img" />
-            </aside>
+        <section className="answer ray-sum" data-reveal>
+          <div>
+            <h2>{p.kw} 핵심 요약</h2>
+            <p>{c.summaryText}</p>
           </div>
+          <dl className="info">{c.facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
         </section>
-      </div>
 
-      <section className="band">
-        <div className="wrap">
-          <SectionHead center title={c.flow.heading} sub="견적 상담 → 방문 견적 → 포장 → 운반 → 정리" />
-          <Flow steps={c.flow.steps} />
+        <article className="ray">
+          {c.sections.map((x, i) => (
+            <section key={i} data-reveal>
+              <h2><span>{String(i + 1).padStart(2, '0')}</span>{x.h}</h2>
+              <p>{x.p}</p>
+            </section>
+          ))}
+        </article>
+        <div className="strip strip-3">
+          {[midImg, ...restImg].slice(0, 3).map((s) => <figure key={s.id}><StockImg s={s} /></figure>)}
         </div>
-      </section>
-
-      <div className="wrap">
-        <section className="sec">
-          <SectionHead title={c.scope.heading} sub={c.scope.intro} />
-          <ol className="scope reveal-group">{c.scope.items.map((x) => <li key={x.t}><div><b>{x.t}</b><span>{x.d}</span></div></li>)}</ol>
-        </section>
-
-        {c.mod && (
-          <section className="sec alt">
-            <SectionHead title={c.mod.heading} />
-            <div className="cols">
-              <div className="prose" data-reveal>{c.mod.paras.map((t, i) => <p key={i}>{t}</p>)}</div>
-              <dl className="info" data-reveal>{c.mod.table.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-            </div>
-          </section>
-        )}
       </div>
 
       <section className="cta-band">
@@ -120,31 +88,18 @@ export default function KeywordPage({ params }: { params: { slug: string } }) {
       </section>
 
       <div className="wrap">
-        <section className="sec">
-          <SectionHead title={c.ready.heading} />
-          <div className="cols">
-            <ul className="sq reveal-group">{c.ready.items.map((x) => <li key={x}>{x}</li>)}</ul>
-            <p className="miss" data-reveal>{c.ready.miss}</p>
-          </div>
-        </section>
-
-        <section className="sec alt">
-          <SectionHead title={`${P.name} 이사 안내`} />
-          <dl className="info" data-reveal>{c.info.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-        </section>
-
         <section className="sec" id="faq">
-          <SectionHead title="자주 묻는 질문" />
+          <h2 className="ray-h">{p.kw} 자주 묻는 질문</h2>
           <div className="faq">
             {c.faq.map((f) => <details key={f.q} data-reveal><summary>{f.q}<i /></summary><p>{f.a}</p></details>)}
           </div>
         </section>
 
         <section className="sec">
-          <SectionHead title={`${p.kw} 관련 안내`} />
+          <h2 className="ray-h">{p.kw} 관련 안내</h2>
           <div className="related">
-            {rel.samePlace.length > 0 && <div><h3>{P.name} 다른 이사</h3><ul className="linklist">{rel.samePlace.map((x) => <li key={x.slug}><Link href={pagePath(x)}>{x.kw}<IconArrow /></Link></li>)}</ul></div>}
-            {rel.sameHub.length > 0 && <div><h3>{p.hub} 다른 동네</h3><ul className="linklist">{rel.sameHub.map((x) => <li key={x.slug}><Link href={pagePath(x)}>{x.kw}<IconArrow /></Link></li>)}</ul></div>}
+            {rel.samePlace.length > 0 && <div><h3>{P.name}, 다른 이사도</h3><ul className="linklist">{rel.samePlace.map((x) => <li key={x.slug}><Link href={pagePath(x)}>{x.kw}<IconArrow /></Link></li>)}</ul></div>}
+            {rel.sameHub.length > 0 && <div><h3>같은 {p.word}, {p.hub} 다른 동네</h3><ul className="linklist">{rel.sameHub.map((x) => <li key={x.slug}><Link href={pagePath(x)}>{x.kw}<IconArrow /></Link></li>)}</ul></div>}
             <div><h3>다른 지역</h3><ul className="linklist">
               {rel.otherHubs.map((x) => <li key={x.slug}><Link href={pagePath(x)}>{x.kw}<IconArrow /></Link></li>)}
               <li><Link href={hubPath(p.hub)}>{p.hub} 이사 지역 안내 전체<IconArrow /></Link></li>

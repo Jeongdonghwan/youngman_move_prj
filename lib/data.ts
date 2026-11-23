@@ -48,10 +48,10 @@ export const rotate = <T,>(arr: T[], seed: string, salt = ''): T[] => {
 // 관련 페이지 — 열린 페이지만. 같은 지역 다른 이사 / 같은 허브 다른 동네 같은 단어 / 다른 허브 같은 단어
 const byPlace = new Map<string, Page[]>();
 for (const x of OPEN_PAGES) { const a = byPlace.get(x.place) || []; a.push(x); byPlace.set(x.place, a); }
-export function related(p: Page) {
-  const samePlace = rotate((byPlace.get(p.place) || []).filter((x) => x.slug !== p.slug && x.word !== p.word), p.slug, 'sp').slice(0, 6);
-  const sameHub = rotate(OPEN_PAGES.filter((x) => x.hub === p.hub && x.place !== p.place && x.word === p.word), p.slug, 'sh').slice(0, 6);
-  const otherHubs = rotate(OPEN_PAGES.filter((x) => x.hub !== p.hub && x.unit !== '동·읍면' && x.word === p.word && x.mod === p.mod), p.slug, 'oh').slice(0, 6);
+export function related(p: Page, n = 6) {
+  const samePlace = rotate((byPlace.get(p.place) || []).filter((x) => x.slug !== p.slug && x.word !== p.word), p.slug, 'sp').slice(0, n);
+  const sameHub = rotate(OPEN_PAGES.filter((x) => x.hub === p.hub && x.place !== p.place && x.word === p.word), p.slug, 'sh').slice(0, n);
+  const otherHubs = rotate(OPEN_PAGES.filter((x) => x.hub !== p.hub && x.unit !== '동·읍면' && x.word === p.word && x.mod === p.mod), p.slug, 'oh').slice(0, n > 5 ? 6 : 3);
   return { samePlace, sameHub, otherHubs };
 }
 
