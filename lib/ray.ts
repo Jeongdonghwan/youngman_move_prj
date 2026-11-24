@@ -18,6 +18,17 @@ const paraAll = (sents: string[], max = 268) => {
 };
 const MOD_CAT: Record<string, string> = { base: '순서·범위', price: '비용 기준', quote: '견적 받기', pick: '업체 고르기', weekend: '주말 일정', today: '당일 이사' };
 
+// h1 수식어: "키워드 수식어"가 40자를 넘지 않는 벌을 해시 순서로 고르고, 다 넘으면 구 단위로 자른다 (title 앞부분 = h1)
+const fitSub = (kw: string, arr: string[], seed: string) => {
+  const k = hi(`${seed}::h1sub`) % arr.length;
+  const order = [...arr.slice(k), ...arr.slice(0, k)];
+  const ok = order.find((x) => kw.length + 1 + x.length <= 40);
+  if (ok) return ok;
+  const words = order[0].split(' ');
+  while (words.length > 1 && kw.length + 1 + words.join(' ').length > 40) words.pop();
+  return words.join(' ').replace(/[,·]$/, '');
+};
+
 export function composeRay(p: Page) {
   const c = compose(p);
   const used = new Set<string>(); // 한 페이지 안에서 같은 문장 두 번 쓰지 않기
@@ -34,14 +45,14 @@ export function composeRay(p: Page) {
   const sc = svc.scope;
   const where = c.label[0][1];
 
-  const h1sub = pick({
+  const h1sub = fitSub(kw, {
     base: [`${C.noun} 동선부터 새집 정리까지`, `${sc[0].t}·${sc[1].t} 범위와 순서`, `방문 견적 뒤 다섯 단계`],
     price: [`짐 양·층수·날짜로 달라지는 견적`, `${C.noun} 동선이 바꾸는 비용`, `견적서에 적히는 항목부터`],
     quote: [`방문 견적 받는 순서`, `${C.noun} 짐 양 확인부터`, `견적서에 적을 다섯 항목`],
     pick: [`업체에 물어볼 세 가지`, `${C.noun} 동선을 먼저 묻는 업체`, `방문 견적부터 마무리 확인까지`],
     weekend: [`주말 날짜 잡는 순서`, `${C.noun} 주말 이사 확인할 것`, `관리 규정부터 보는 주말 일정`],
     today: [`당일 가능 여부 먼저 확인`, `${C.noun} 급한 이사 준비`, `짐 목록·층수부터 알려 주기`],
-  }[g], s, 'h1sub');
+  }[g], s);
 
   const cat = `${p.hub} · ${svc.type} · ${MOD_CAT[g]}`;
 
@@ -135,5 +146,5 @@ export function composeRay(p: Page) {
   const fq = c.faq.filter((f, i) => i < 2 || f.a.includes(nm));
   const faq = fq.length >= 3 ? fq : c.faq.slice(0, 3);
 
-  return { ...c, h1sub, cat, summaryText: summary, facts, sections, description, faq };
+  return { ...c, title: `${kw} ${h1sub} | ${BRAND}`, h1sub, cat, summaryText: summary, facts, sections, description, faq };
 }
